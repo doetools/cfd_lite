@@ -65,28 +65,28 @@
             "y": 1,
             "orientation": 90,
             "open_area": 0.25,
-            "loss_coefficient": 50000
+            "loss_coefficient": 500
         },
         {
             "x": 9,
             "y": 2,
             "orientation": 90,
             "open_area": 0.25,
-            "loss_coefficient": 50000
+            "loss_coefficient": 500
         },
         {
             "x": 9,
             "y": 3,
             "orientation": 90,
             "open_area": 0.25,
-            "loss_coefficient": 50000
+            "loss_coefficient": 500
         },
         {
             "x": 9,
             "y": 4,
             "orientation": 90,
             "open_area": 0.25,
-            "loss_coefficient": 50000
+            "loss_coefficient": 500
         }
     ],
     "solver_controls": {
@@ -95,6 +95,6 @@
         "x_velocity_relaxation": 0.6,
         "y_velocity_relaxation": 0.6,
         "pressure_relaxation": 0.6,
-        "max_outer_iterations": 10000
+        "max_outer_iterations": 300
     }
 }

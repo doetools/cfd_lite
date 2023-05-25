@@ -1,3 +1,5 @@
 *.mtx
 *.txt
 *.dat
+__pycache__/
+*.csv
