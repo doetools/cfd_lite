@@ -1,0 +1,5 @@
+FLUID = -1
+NON_FLUID = 0
+
+RHO = 1.2
+NU = 1.8e-5 / RHO

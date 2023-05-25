@@ -1,0 +1,100 @@
+{
+    "id": "wind_tunnel_with_hole",
+    "D": 0.1524,
+    "num_x_cells": 18,
+    "num_y_cells": 6,
+    "inlet": [
+        {
+            "x": 0,
+            "y": 1,
+            "orientation": 90,
+            "T": 20,
+            "velocity": 1
+        },
+        {
+            "x": 0,
+            "y": 2,
+            "orientation": 90,
+            "T": 20,
+            "velocity": 1
+        },
+        {
+            "x": 0,
+            "y": 3,
+            "orientation": 90,
+            "T": 20,
+            "velocity": 1
+        },
+        {
+            "x": 0,
+            "y": 4,
+            "orientation": 90,
+            "T": 20,
+            "velocity": 1
+        }
+    ],
+    "outlet": [
+        {
+            "x": 16,
+            "y": 1,
+            "orientation": 90,
+            "velocity": 1
+        },
+        {
+            "x": 16,
+            "y": 2,
+            "orientation": 90,
+            "velocity": 1
+        },
+        {
+            "x": 16,
+            "y": 3,
+            "orientation": 90,
+            "velocity": 1
+        },
+        {
+            "x": 16,
+            "y": 4,
+            "orientation": 90,
+            "velocity": 1
+        }
+    ],
+    "resistance_plate": [
+        {
+            "x": 9,
+            "y": 1,
+            "orientation": 90,
+            "open_area": 0.25,
+            "loss_coefficient": 50000
+        },
+        {
+            "x": 9,
+            "y": 2,
+            "orientation": 90,
+            "open_area": 0.25,
+            "loss_coefficient": 50000
+        },
+        {
+            "x": 9,
+            "y": 3,
+            "orientation": 90,
+            "open_area": 0.25,
+            "loss_coefficient": 50000
+        },
+        {
+            "x": 9,
+            "y": 4,
+            "orientation": 90,
+            "open_area": 0.25,
+            "loss_coefficient": 50000
+        }
+    ],
+    "solver_controls": {
+        "pressure_iterations": 100,
+        "velocity_iterations": 100,
+        "x_velocity_relaxation": 0.6,
+        "y_velocity_relaxation": 0.6,
+        "pressure_relaxation": 0.6,
+        "max_outer_iterations": 10000
+    }
+}
