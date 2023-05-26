@@ -33,5 +33,6 @@ __global__ void reduce(float *x, const int x_size, float *y, const int y_size)
     }
 
     // save
-    y[block_x] = tmp[0];
+    if (block_x < y_size)
+        y[block_x] = tmp[0];
 }

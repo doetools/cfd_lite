@@ -1,38 +1,48 @@
 import numpy as np
 import pycuda.gpuarray as gpuarray
-from pycuda.compiler import SourceModule
 import pycuda.autoinit
+import cu
+from build import build_kenerls
 
-x_size = 10000000
-x = np.random.randn(x_size).astype(dtype=np.float32)
-x_gpu = gpuarray.to_gpu(x)
 
-with open("./cfd_cuda_lib/utility.cu", "r") as f:
-    source = f.read()
+def sum_vector(x_gpu: gpuarray) -> np.float32:
 
-kernels = SourceModule(source)
-reduce = kernels.get_function("reduce")
+    reduce = build_kenerls().get_function("reduce")
 
-block_size = 32 * 32
-block = (block_size, 1, 1)
-num_block = (
-    int(x_size / block_size)
-    if x_size % block_size == 0
-    else int(x_size / block_size) + 1
-)
-grid = (num_block, 1, 1)
+    x_size = x_gpu.size
 
-y = np.zeros(num_block, dtype=np.float32)
-y_gpu = gpuarray.to_gpu(y)
+    num_block = (
+        int(x_size / cu.N_BLOCK_2D)
+        if x_size % cu.N_BLOCK_2D == 0
+        else int(x_size / cu.N_BLOCK_2D) + 1
+    )
 
-reduce(
-    x_gpu.gpudata,
-    np.int32(x_size),
-    y_gpu.gpudata,
-    np.int32(num_block),
-    block=block,
-    grid=grid,
-)
+    grid = (num_block, 1, 1)
 
-sum = y_gpu.get().sum()
-print(sum, x.sum())
+    y_gpu = gpuarray.zeros(num_block, dtype=np.float32)
+
+    reduce(
+        x_gpu.gpudata,
+        np.int32(x_size),
+        y_gpu.gpudata,
+        np.int32(num_block),
+        block=cu.BLOCK_1D,
+        grid=grid,
+    )
+
+    if num_block < 10:
+        return y_gpu.get().sum()
+    else:
+        return sum_vector(y_gpu)
+
+
+if __name__ == "__main__":
+
+    np.random.seed(42)
+    x_size = 1024 * 100
+    x = np.random.randn(x_size).astype(dtype=np.float32)
+
+    x_gpu = gpuarray.to_gpu(x)
+    total = sum_vector(x_gpu)
+
+    print(total, x.sum())
