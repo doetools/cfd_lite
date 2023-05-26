@@ -7,7 +7,7 @@
 #define ix_i(gid) (gid / row_size)
 #define ix_j(gid) (gid % row_size)
 
-#define LEGAL 1
+#define FLUID -1
 
 __global__ void reduce(float *x, const int x_size, float *y, const int y_size) {
 
@@ -63,21 +63,19 @@ __global__ void gs_colors(int *colors, const int row_size) {
   }
 }
 
-__global__ void gauss_seidel(float *x, float *a_e, float *a_w, float *a_n,
-                             float *a_s, float *a_p, float *b, const float sor,
+__global__ void gauss_seidel(float *x, const float *a_e, const float *a_w,
+                             const float *a_n, const float *a_s,
+                             const float *a_p, const float *b, const float sor,
                              int *type, int *colors, int target_color,
                              const int x_size, const int row_size) {
-  int block_x = blockIdx.x;
-  int block_dim = blockDim.x;
-  int lid = threadIdx.x;
-
-  int gid = block_x * block_dim + lid;
+  int gid = blockIdx.x * blockDim.x + threadIdx.x;
   int i = ix_i(gid);
   int j = ix_j(gid);
 
   float tmp;
 
-  if (gid < x_size && colors[gid] == target_color && type[gid] == LEGAL) {
+  if (gid < x_size && colors[gid] == target_color && type[gid] == FLUID) {
+
     tmp = (a_e[gid] * x[ix(i, j + 1)] + a_w[gid] * x[ix(i, j - 1)] +
            a_n[gid] * x[ix(i + 1, j)] + a_s[gid] * x[ix(i - 1, j)] + b[gid]) /
           a_p[gid];

@@ -1,11 +1,11 @@
 import numpy as np
 import pycuda.gpuarray as gpuarray
 import pycuda.autoinit
-import cu
-from build import build_kenerls
-from pytools import memoize
-from solver_io import CFDCofficientsGPU
+import cfd_cuda_lib.cu as cu
+from cfd_cuda_lib.build import build_kenerls
+from cfd_cuda_lib.solver_io import CFDCofficientsGPU
 from typing import Tuple
+from pytools import memoize
 
 
 def sum_vector(x_gpu: gpuarray) -> np.float32:
@@ -48,10 +48,12 @@ def gauss_seidel(
 ) -> None:
     # variables
     x_size = x.size
-    column_size, row_size = x.shape
+    _, row_size = x.shape
 
     # colors
     colors_gpu = get_gs_colors(x_size, row_size)
+    # print(colors_gpu.get().reshape(x.shape))
+    # print(x_type.get().reshape(x.shape))
 
     # get gs kernel
     gauss_seidel_cu = build_kenerls().get_function("gauss_seidel")
@@ -83,12 +85,12 @@ def gauss_seidel(
         count += 1
 
 
-def get_1d_grid(size: int, block_size=cu.N_BLOCK_1D) -> Tuple[int, int, int]:
+def get_1d_grid(size: int, block_size=cu.N_BLOCK_2D) -> Tuple[int, int, int]:
     num_block = get_1d_num_block(size, block_size)
     return (num_block, 1, 1)
 
 
-def get_1d_num_block(size: int, block_size=cu.N_BLOCK_1D) -> int:
+def get_1d_num_block(size: int, block_size=cu.N_BLOCK_2D) -> int:
     num_block = int(size / block_size)
     if size % block_size == 0:
         return num_block
