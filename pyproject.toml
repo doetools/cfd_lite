@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "ita_cfd_lite"
+name = "cfd_lite"
 version = "0.1.0"
 description = ""
-authors = ["SESA461392 <Wei.Tian@se.com>"]
+authors = [""]
 
 [tool.poetry.dependencies]
 python = "^3.7"

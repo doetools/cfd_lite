@@ -2,6 +2,9 @@ import numpy as np
 from typing import Tuple
 from dataclasses import dataclass
 
+CPU = "cpu"
+GPU = "gpu"
+
 
 class CFDGeometry:
     def __init__(self, D: float, num_x_cells: int, num_y_cells: int) -> None:
