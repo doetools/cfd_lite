@@ -1,5 +1,7 @@
 #define N_BLOCK_1D 32
 #define N_BLOCK_2D 1024
+#define RED 1
+#define GREEN 2
 
 #define ix(i, j) ((j) + (row_size) * (i))
 #define ix_i(gid) (gid / row_size)
@@ -39,6 +41,26 @@ __global__ void reduce(float *x, const int x_size, float *y, const int y_size) {
   // save
   if (block_x < y_size)
     y[block_x] = tmp[0];
+}
+
+__global__ void gs_colors(int *colors, const int row_size) {
+  int gid = blockIdx.x * blockDim.x + threadIdx.x;
+  int i = ix_i(gid);
+  int j = ix_j(gid);
+
+  if (i % 2 == 0) {
+    if (j % 2 == 0)
+      colors[gid] = RED;
+    else
+      colors[gid] = GREEN;
+  }
+
+  if (i % 2 == 1) {
+    if (j % 2 == 0)
+      colors[gid] = GREEN;
+    else
+      colors[gid] = RED;
+  }
 }
 
 __global__ void gauss_seidel(float *x, float *a_e, float *a_w, float *a_n,
